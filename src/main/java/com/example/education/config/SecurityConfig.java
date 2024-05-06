@@ -32,7 +32,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(customizer -> customizer
-                        .requestMatchers("/api/login", "/api/registration").permitAll()
+                        .requestMatchers("/api/login", "/api/registration", "/api/current-user").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(customizer -> customizer
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
