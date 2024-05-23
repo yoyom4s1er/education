@@ -57,15 +57,19 @@ public class TasksController {
 
             if (i == 0) {
                 if (cell1Value.equals(cell2ValueCompare) && cell2Value.equals(cell1ValueCompare)) {
+                    userService.addMistakeToTask1(user.getUsername());
                     return ResponseEntity.status(420).body("Ошибка. Ячейка A1 должна соответствовать значению «Название_товара», а ячейка B1 должна соответствовать значению «Продажи». Проверьте правильность выбора полей при построении визуализации по осям X и Y. Ось X должна строиться на основе данных поля «Название_товара», а ось Y на основе данных поля «Продажи».");
                 }
                 if (!cell1Value.equals(cell1ValueCompare) && !cell2Value.equals(cell2ValueCompare)) {
+                    userService.addMistakeToTask1(user.getUsername());
                     return ResponseEntity.status(420).body("Ошибка. Ячейка A1 должна соответствовать значению «Название_товара», а ячейка B1 должна соответствовать значению «Продажи». Проверьте соответствуют ли названия полей в вашем датасете названиям полей в датасете, который представлен в части теории курса «Подключения и датасеты».");
                 }
                 if (!cell1Value.equals(cell1ValueCompare)) {
+                    userService.addMistakeToTask1(user.getUsername());
                     return ResponseEntity.status(420).body("Ошибка. Ячейка A1 должна соответствовать значению «Название_товара». Проверьте соответствуют ли названия полей в вашем датасете названиям полей в датасете, который представлен в части теории курса «Подключения и датасеты».");
                 }
                 if (!cell2Value.equals(cell2ValueCompare)) {
+                    userService.addMistakeToTask1(user.getUsername());
                     return ResponseEntity.status(420).body("Ошибка. Ячейка B1 должна соответствовать значению «Продажи». Проверьте соответствуют ли названия полей в вашем датасете названиям полей в датасете, который представлен в части теории курса «Подключения и датасеты».");
                 }
             }
@@ -119,15 +123,19 @@ public class TasksController {
 
             if (i == 0) {
                 if (cell1Value.equals(cell2ValueCompare) && cell2Value.equals(cell1ValueCompare)) {
+                    userService.addMistakeToTask2(user.getUsername());
                     return ResponseEntity.status(420).body("Ошибка. Ячейка A1 должна соответствовать значению «Менеджер», а ячейка B1 должна соответствовать значению «Продажи». Проверьте правильность выбора полей при построении визуализации по осям X и Y. Ось X должна строиться на основе данных поля «Менеджер», а ось Y на основе данных поля «Продажи».");
                 }
                 if (!cell1Value.equals(cell1ValueCompare) && !cell2Value.equals(cell2ValueCompare)) {
+                    userService.addMistakeToTask2(user.getUsername());
                     return ResponseEntity.status(420).body("Ошибка. Ячейка A1 должна соответствовать значению «Менеджер», а ячейка B1 должна соответствовать значению «Продажи». Проверьте соответствуют ли названия полей в вашем датасете названиям полей в датасете, который представлен в части теории курса «Подключения и датасеты».");
                 }
                 if (!cell1Value.equals(cell1ValueCompare)) {
+                    userService.addMistakeToTask2(user.getUsername());
                     return ResponseEntity.status(420).body("Ошибка. Ячейка A1 должна соответствовать значению «Менеджер». Проверьте соответствуют ли названия полей в вашем датасете названиям полей в датасете, который представлен в части теории курса «Подключения и датасеты».");
                 }
                 if (!cell2Value.equals(cell2ValueCompare)) {
+                    userService.addMistakeToTask2(user.getUsername());
                     return ResponseEntity.status(420).body("Ошибка. Ячейка B1 должна соответствовать значению «Продажи». Проверьте соответствуют ли названия полей в вашем датасете названиям полей в датасете, который представлен в части теории курса «Подключения и датасеты».");
                 }
             }
@@ -147,30 +155,15 @@ public class TasksController {
     }
 
     @PostMapping("/3")
-    public ResponseEntity<String> checkTask3(@RequestParam("file") MultipartFile excelFile) throws IOException {
+    public ResponseEntity<String> checkTask3(@RequestBody String answer) throws IOException {
 
         var user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        File file = ResourceUtils.getFile("classpath:Task3.xlsx");
-        InputStream inputStream = new FileInputStream(file);
+        String compare = "10845553542678988945";
 
-        XSSFWorkbook workbookOriginal = (XSSFWorkbook) WorkbookFactory.create(inputStream);
-        XSSFWorkbook workbook = (XSSFWorkbook) WorkbookFactory.create(excelFile.getInputStream());
-
-        for (int i = 0; i < 2; i++) {
-            String cell1Value;
-
-            String cell1ValueCompare;
-
-            XSSFCell cell1 = workbookOriginal.getSheetAt(0).getRow(i).getCell(0);
-            cell1Value = extractValue(cell1);
-
-            cell1ValueCompare = extractValue(workbook.getSheetAt(0).getRow(i).getCell(0));
-
-            if (!cell1Value.equals(cell1ValueCompare)) {
-                userService.addMistakeToTask3(user.getUsername());
-                return ResponseEntity.status(420).body("Ошибка. Попробуйте еще раз.");
-            }
+        if (!answer.equals(compare)) {
+            userService.addMistakeToTask3(user.getUsername());
+            return ResponseEntity.status(420).body("Ошибка. Попробуйте еще раз.");
         }
 
         userService.completeTask3(user.getUsername());
